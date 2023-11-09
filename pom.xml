@@ -2,16 +2,24 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.synclite</groupId>
+	<groupId>io.synclite</groupId>
 	<artifactId>synclite-logger</artifactId>
 	<version>${revision}</version>
 	<name>logger</name>
-	<description>SyncLite logger for Java SQLite applications</description>
+	<description>SyncLite logger for Java applications</description>
+	<url>https://github.com/syncliteio/SyncLiteLoggerJava</url>
+	<licenses>
+		<license>
+			<name>Apache License Version 2.0, January 2004</name>
+			<url>http://www.apache.org/licenses/</url>
+		</license>	
+	</licenses>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 	</properties>
+
 
 	<build>
 		<plugins>
