@@ -15,10 +15,12 @@
 		</license>	
 	</licenses>
 	<developers>
-		<name>Mahendra Chavan</name>
-		<email>mahendra.chavan@synclite.io</email>
-		<organization>SyncLite Systems Private Limited</organization>
-		<organizationUrl>www.synclite.io</organizationUrl>
+		<developer>
+			<name>Mahendra Chavan</name>
+			<email>mahendra.chavan@synclite.io</email>
+			<organization>SyncLite Systems Private Limited</organization>
+			<organizationUrl>www.synclite.io</organizationUrl>
+		</developer>	
 	</developers>
 	<scm>
 		<connection>scm:git:git://github.com/syncliteio/SyncLiteLoggerJava.git</connection>
