@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.synclite</groupId>
 	<artifactId>synclite-logger</artifactId>
-	<version>2023.11.10</version>
+	<version>2023.11.11</version>
 	<name>logger</name>
 	<description>SyncLite logger for Java applications</description>
 	<url>https://github.com/syncliteio/SyncLiteLoggerJava</url>
