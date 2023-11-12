@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.synclite</groupId>
 	<artifactId>synclite-logger</artifactId>
-	<version>2023.11.11</version>
-	<name>logger</name>
+	<version>2023.11.12</version>
+	<name>SyncLite Logger</name>
 	<description>SyncLite logger for Java applications</description>
 	<url>https://github.com/syncliteio/SyncLiteLoggerJava</url>
 	<licenses>
 		<license>
-			<name>Apache License Version 2.0, January 2004</name>
+			<name>Apache License Version 2.0</name>
 			<url>http://www.apache.org/licenses/</url>
 		</license>	
 	</licenses>
