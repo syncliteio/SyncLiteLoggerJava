@@ -2,6 +2,8 @@
 
 SyncLite is a no-code, real-time, relational data consolidation platform empowering developers to rapidly build data-intensive applications for desktops, edge devices, smartphones, with the capability to enable in-app data management, in-app analytics and perform real-time data consolidation from numerous application instances into one or more databases, data warehouses, or data lakes of your choice.
 
+{Edge/Desktop/Phone Apps} + {SyncLite Logger} ------> {Staging Storage} ------> { SyncLite Consolidator} -----> {Destination DB/DW/DataLakes}
+
 SyncLite is scalable, secure, extensible, fault-tolerant, enabling a wide range of use-cases, including rapidly building smart resource monitors, native SQL data stores, building data mesh architectures, database migration/replication pipelines, deploying pluggable IoT data stacks, enabling cloud databases at the edge, creating OLTP + OLAP solutions, setting up software telemetry pipelines, among others.
 
 For more details, check out https://www.synclite.io
@@ -164,3 +166,12 @@ SyncLite Platform allows applications to create three types of devices:
 	}	
 
 ```
+
+# Deploying SyncLite Consolidator
+
+Refer https://hub.docker.com/repository/docker/syncliteio/synclite-consolidator/general for setting up SyncLite Consolidator.
+
+
+# Support
+
+Contact support@synclite.io for support and feedback.
