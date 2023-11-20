@@ -37,10 +37,25 @@ SyncLite Platform allows applications to create three types of devices:
 
 1. Transactional Device : Transcational device supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as hot data stores, SQL application caches, edge enablement of cloud databases, OLTP + OLAP data stores etc.
 ```
+package testApp;
+
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import io.synclite.logger.*;
+
+
+public class TestTransactionalDevice {
+	
+	public static Path syncLiteDBPath;
 	public static void appStartup() throws SQLException, ClassNotFoundException {
+		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
 		Class.forName("io.synclite.logger.Transactional");
-		Path dbPath = Path.of("t.db");
-		SyncLite.initialize(dbPath, Path.of("synclite_logger.conf"));
+		Path dbPath = syncLiteDBPath.resolve("t.db");
+		SyncLite.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}	
 	
 	public void myAppBusinessLogic() throws SQLException {
@@ -48,7 +63,7 @@ SyncLite Platform allows applications to create three types of devices:
 		//Some application business logic
 		//
 		//Perform some database operations		
-		try (Connection conn = DriverManager.getConnection("jdbc:synclite:t.db")) {
+		try (Connection conn = DriverManager.getConnection("jdbc:synclite:" + syncLiteDBPath.resolve("t.db"))) {
 			try (Statement stmt = conn.createStatement()) { 
 				//Example of executing a DDL : CREATE TABLE. 
 				//You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
@@ -86,85 +101,140 @@ SyncLite Platform allows applications to create three types of devices:
 		SyncLite.closeDevice(Path.of("t.db"));
 		//You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 	}	
+	
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		appStartup();
+		TestTransactionalDevice testApp = new TestTransactionalDevice();
+		testApp.myAppBusinessLogic();
+	}
+
+}
+
 ```
    
 2. Telemetry Device : Telemetry device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming, IOT etc. use cases
 
 ```
+package testApp;
+
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import io.synclite.logger.*;
+
+public class TestTelemetryDevice {
+	public static Path syncLiteDBPath;
+
 	public static void appStartup() throws SQLException, ClassNotFoundException {
+		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
 		Class.forName("io.synclite.logger.Telemetry");
-		Path dbPath = Path.of("t_tel.db");
-		SyncLiteTelemetry.initialize(dbPath, Path.of("synclite_logger.conf"));
-	}	
-	
+		Path dbPath = syncLiteDBPath.resolve("t_tel.db");
+		SyncLiteTelemetry.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+	}
+
 	public void myAppBusinessLogic() throws SQLException {
 		//
-		//Some application business logic
+		// Some application business logic
 		//
-		//Perform some database operations		
-		try (Connection conn = DriverManager.getConnection("jdbc:synclite_telemetry:t_tel.db")) {
-			try (Statement stmt = conn.createStatement()) { 
-				//Example of executing a DDL : CREATE TABLE. 
-				//You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
-				stmt.execute("CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)");				
-			}			
-		
-			//Example of Prepared Statement functionality for bulk insert.
-			try(PreparedStatement pstmt = conn.prepareStatement("INSERT INTO feedback VALUES(?, ?)")) {
+		// Perform some database operations
+		try (Connection conn = DriverManager
+				.getConnection("jdbc:synclite_telemetry:" + syncLiteDBPath.resolve("t_tel.db"))) {
+			try (Statement stmt = conn.createStatement()) {
+				// Example of executing a DDL : CREATE TABLE.
+				// You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
+				stmt.execute("CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)");
+			}
+
+			// Example of Prepared Statement functionality for bulk insert.
+			try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO feedback VALUES(?, ?)")) {
 				pstmt.setInt(1, 4);
 				pstmt.setString(2, "Excellent Product");
 				pstmt.addBatch();
-				
+
 				pstmt.setInt(1, 5);
 				pstmt.setString(2, "Outstanding Product");
 				pstmt.addBatch();
-				
-				pstmt.executeBatch();			
+
+				pstmt.executeBatch();
 			}
 		}
-		//Close SyncLite database/device cleanly.
+		// Close SyncLite database/device cleanly.
 		SyncLiteTelemetry.closeDevice(Path.of("t_tel.db"));
-		//You can also close all open databases/devices in a single SQL : CLOSE ALL DATABASES
-	}	
+		// You can also close all open databases/devices in a single SQL : CLOSE ALL
+		// DATABASES
+	}
+
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		appStartup();
+		TestTelemetryDevice testApp = new TestTelemetryDevice();
+		testApp.myAppBusinessLogic();
+	}
+}
 ```
 3. Appender Device : Appander device provides similar capabilities as Telemetry device with an additional capability to also mantain a copy of the ingested data on the edge device which can be leveraged for in-app edge computing/analytics.
 ```
+package testApp;
+
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+import io.synclite.logger.*;
+
+public class TestAppenderDevice {
+	public static Path syncLiteDBPath;
+
 	public static void appStartup() throws SQLException, ClassNotFoundException {
-		Class.forName("io.synclite.logger.Appender");
-		Path dbPath = Path.of("t_appender.db");
-		SyncLiteAppender.initialize(dbPath, Path.of("synclite_logger.conf"));
-	}	
-	
+		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
+		Class.forName("io.synclite.logger.Telemetry");
+		Path dbPath = syncLiteDBPath.resolve("t_app.db");
+		SyncLiteAppender.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+	}
+
 	public void myAppBusinessLogic() throws SQLException {
 		//
-		//Some application business logic
+		// Some application business logic
 		//
-		//Perform some database operations		
-		try (Connection conn = DriverManager.getConnection("jdbc:synclite_appender:t_appender.db")) {
-			try (Statement stmt = conn.createStatement()) { 
-				//Example of executing a DDL : CREATE TABLE. 
-				//You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
-				stmt.execute("CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)");				
-			}			
-		
-			//Example of Prepared Statement functionality for bulk insert.
-			try(PreparedStatement pstmt = conn.prepareStatement("INSERT INTO feedback VALUES(?, ?)")) {
+		// Perform some database operations
+		try (Connection conn = DriverManager
+				.getConnection("jdbc:synclite_telemetry:" + syncLiteDBPath.resolve("t_app.db"))) {
+			try (Statement stmt = conn.createStatement()) {
+				// Example of executing a DDL : CREATE TABLE.
+				// You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
+				stmt.execute("CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)");
+			}
+
+			// Example of Prepared Statement functionality for bulk insert.
+			try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO feedback VALUES(?, ?)")) {
 				pstmt.setInt(1, 4);
 				pstmt.setString(2, "Excellent Product");
 				pstmt.addBatch();
-				
+
 				pstmt.setInt(1, 5);
 				pstmt.setString(2, "Outstanding Product");
 				pstmt.addBatch();
-				
-				pstmt.executeBatch();			
+
+				pstmt.executeBatch();
 			}
 		}
-		//Close SyncLite database/device cleanly.
-		SyncLiteAppender.closeDevice(Path.of("t_appender.db"));
-		//You can also close all open databases/devices in a single SQL : CLOSE ALL DATABASES
-	}	
+		// Close SyncLite database/device cleanly.
+		SyncLiteAppender.closeDevice(Path.of("t_app.db"));
+		// You can also close all open databases/devices in a single SQL : CLOSE ALL
+		// DATABASES
+	}
 
+	public static void main(String[] args) throws ClassNotFoundException, SQLException {
+		appStartup();
+		TestAppenderDevice testApp = new TestAppenderDevice();
+		testApp.myAppBusinessLogic();
+	}
+
+}
 ```
 
 # Deploying SyncLite Consolidator
