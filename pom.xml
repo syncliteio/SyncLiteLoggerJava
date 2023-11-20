@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.synclite</groupId>
 	<artifactId>synclite-logger</artifactId>
@@ -12,7 +10,7 @@
 		<license>
 			<name>Apache License Version 2.0</name>
 			<url>http://www.apache.org/licenses/</url>
-		</license>	
+		</license>
 	</licenses>
 	<developers>
 		<developer>
@@ -20,7 +18,7 @@
 			<email>mahendra.chavan@synclite.io</email>
 			<organization>SyncLite Systems Private Limited</organization>
 			<organizationUrl>www.synclite.io</organizationUrl>
-		</developer>	
+		</developer>
 	</developers>
 	<scm>
 		<connection>scm:git:git://github.com/syncliteio/SyncLiteLoggerJava.git</connection>
@@ -34,77 +32,162 @@
 	</properties>
 	<distributionManagement>
 		<snapshotRepository>
-   			<id>ossrh</id>
+			<id>ossrh</id>
 			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
 	</distributionManagement>
 
-	 <build>
-        <plugins>        
-         	<plugin>
-                 <groupId>org.sonatype.plugins</groupId>
-                 <artifactId>nexus-staging-maven-plugin</artifactId>
-                 <version>1.6.7</version>
-                 <extensions>true</extensions>
-                 <configuration>
-                       <serverId>ossrh</serverId>
-                       <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
-                       <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                 </configuration>
-           </plugin>
-            <!-- Copy resources during process-resources phase -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>3.2.0</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <includes>
-                                        <include>synclite-logger-2023.11.18.jar</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>3.1.2</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+						<configuration>
+							<!-- configure the plugin here -->
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 
-            <!-- Exclude the default-jar execution -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <id>default-jar</id>
-                        <phase>none</phase>
-                    </execution>
-                </executions>
-            </plugin>            
-             <plugin>
-                 <groupId>org.apache.maven.plugins</groupId>
-                 <artifactId>maven-gpg-plugin</artifactId>
-                 <version>1.5</version>
-                 <executions>
-                       <execution>
-                         <id>sign-artifacts</id>
-                         <phase>verify</phase>
-                         <goals>
-                               <goal>sign</goal>
-                         </goals>
-                       </execution>
-                 </executions>
-       		</plugin>
-        </plugins>            
-    </build>
-   </project>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<appendAssemblyId>false</appendAssemblyId>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.3.1</version>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<!-- Include an empty source directory to satisfy the plugin -->
+							<sourcepath>${project.basedir}/src/main/java</sourcepath>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Copy the existing JAR during the package phase -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+						<id>copy-existing-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>cp</executable> <!-- or use 'copy' for Windows -->
+							<arguments>
+								<argument>${project.basedir}/src/main/resources/${project.build.finalName}.jar</argument>
+								<argument>${project.build.directory}/${project.build.finalName}.jar</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-dummy-javadoc</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>cp</executable> <!-- or use 'copy' for Windows -->
+							<arguments>
+								<argument>${project.basedir}/src/main/resources/README.txt</argument>
+								<argument>${project.build.directory}/${project.build.finalName}-javadoc.jar</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>copy-dummy-sources</id>
+						<phase>package</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>cp</executable> <!-- or use 'copy' for Windows -->
+							<arguments>
+								<argument>${project.basedir}/src/main/resources/README.txt</argument>
+								<argument>${project.build.directory}/${project.build.finalName}-sources.jar</argument>
+							</arguments>
+						</configuration>
+					</execution>
+
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<!-- Sign the main artifact -->
+					<execution>
+						<id>sign-main-artifact</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.7</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
