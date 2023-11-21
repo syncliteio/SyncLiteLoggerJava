@@ -15,7 +15,7 @@ YouTube : https://www.youtube.com/@syncliteplatform
 
 SyncLite Platform comprises of two components : SyncLite Logger and SyncLite Consolidator.
 
-1. SyncLite Logger : SyncLite Logger is a jar file built on top of SQLite, providing a JDBC SQL interface for user applications, enabling them for in-app data management/analytics while logging all the SQL transactional activity into log files and shipping them to one of more configured staging storages like SFTP/S3/MinIO/Kafka/GoogleDrive/MSOneDrive/NFS etc. 
+1. SyncLite Logger : SyncLite Logger is a jar file built on top of SQLite, providing a SQL interface over JDBC for user applications, enabling them for in-app data management/analytics while logging all the SQL transactional activity into log files and shipping them to one of more configured staging storages like SFTP/S3/MinIO/Kafka/GoogleDrive/MSOneDrive/NFS etc. 
 
 2. SyncLite Consolidator : SyncLite Consolidator is a Java application deployed on an on-premise host or a cloud VM is configured to scan thousands of SyncLite devices/databases and their logs continously from the configured staging storage which are uploaded by numerous edge/desktop applications, performs real-time data replication/consolidation into one or more configured databases, data warehouses or data lakes of user's choice.
    
