@@ -40,7 +40,8 @@ Refer src/main/resources/synclite_logger.conf file for all available configurati
 SyncLite Platform allows applications to create three types of devices:
 
 1. Transactional Device : Transcational device supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
-   
+
+## Java   
 ```
 package testApp;
 
@@ -116,8 +117,50 @@ public class TestTransactionalDevice {
 }
 
 ```
-   
+## Python   
+
+```
+import jaydebeapi
+
+props = {
+  "config": "synclite_logger.conf",
+  "device-name" : "transactional1"
+}
+conn = jaydebeapi.connect("io.synclite.logger.Transactional",
+                           "jdbc:synclite:c:\\synclite\\python\\data\\t.db",
+                           props,
+                           "synclite-logger-<version>.jar",)
+
+curs = conn.cursor()
+
+#Example of executing a DDL : CEATE TABLE.
+#You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
+curs.execute('CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)')
+
+#Example of performing basic DML operations INSERT/UPDATE/DELETE
+curs.execute("insert into feedback values (3, 'Good product')")
+
+#Example of setting Auto commit OFF to implement transactional semantics
+conn.jconn.setAutoCommit(False)
+curs.execute("update feedback set comment = 'Better product' where rating = 3")
+curs.execute("insert into feedback values (1, 'Poor product')")
+curs.execute("delete from feedback where rating = 1")
+conn.commit()
+conn.jconn.setAutoCommit(True)
+
+
+#Example of Prepared Statement functionality for bulk insert.
+args = [[4, 'Excellent product'],[5, 'Outstanding product']]
+
+#Close SyncLite database/device cleanly.
+curs.execute("close database c:\\synclite\\python\\data\\t.db");
+
+#You can also close all open databases in a single SQL : CLOSE ALL DATABASES
+```
+
 2. Telemetry Device : Telemetry device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming, IOT etc. use cases
+
+## Java
 
 ```
 package testApp;
@@ -179,7 +222,39 @@ public class TestTelemetryDevice {
 	}
 }
 ```
+## Python
+
+```
+import jaydebeapi
+props = {
+  "config": "synclite_logger.conf",
+  "device-name" : "telemetry1"
+}
+conn = jaydebeapi.connect("io.synclite.logger.Telemetry",
+                           "jdbc:synclite_telemetry:c:\\synclite\\python\\data\\t_tel.db",
+                           props,
+                           "synclite-logger-<version>.jar",)
+
+curs = conn.cursor()
+
+#Example of executing a DDL : CEATE TABLE.
+#You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
+curs.execute('CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)')
+
+#Example of Prepared Statement functionality for bulk insert.
+args = [[4, 'Excellent product'],[5, 'Outstanding product']]
+curs.executemany("insert into feedback values (?, ?)", args)
+
+#Close SyncLite database/device cleanly.
+curs.execute("close database c:\\synclite\\python\\data\\t_tel.db");
+
+#You can also close all open databases in a single SQL : CLOSE ALL DATABASES
+```
+
 3. Appender Device : Appander device provides similar capabilities as Telemetry device with an additional capability to also mantain a copy of the ingested data on the edge device which can be leveraged for in-app edge computing/analytics.
+
+## Java
+
 ```
 package testApp;
 
@@ -240,6 +315,35 @@ public class TestAppenderDevice {
 	}
 
 }
+```
+
+## Python
+
+```
+import jaydebeapi
+props = {
+  "config": "synclite_logger.conf",
+  "device-name" : "appender1"
+}
+conn = jaydebeapi.connect("io.synclite.logger.Appender",
+                           "jdbc:synclite_appender:c:\\synclite\\python\\data\\t_appender.db",
+                           props,
+                           "synclite-logger-<version>.jar",)
+
+curs = conn.cursor()
+
+#Example of executing a DDL : CEATE TABLE.
+#You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
+curs.execute('CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)')
+
+#Example of Prepared Statement functionality for bulk insert.
+args = [[4, 'Excellent product'],[5, 'Outstanding product']]
+curs.executemany("insert into feedback values (?, ?)", args)
+
+#Close SyncLite database/device cleanly.
+curs.execute("close database c:\\synclite\\python\\data\\t_appender.db");
+
+#You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
 # Deploying SyncLite Consolidator
