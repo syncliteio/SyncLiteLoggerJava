@@ -348,7 +348,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t_appender.db");
 
 # Deploying SyncLite Consolidator
 
-Refer https://hub.docker.com/repository/docker/syncliteio/synclite-consolidator/general for setting up SyncLite Consolidator.
+Refer https://hub.docker.com/r/syncliteio/synclite-consolidator for setting up SyncLite Consolidator.
 
 
 # Support
