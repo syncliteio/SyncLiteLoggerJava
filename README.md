@@ -27,7 +27,7 @@ This repository has been created to distribute the SyncLite logger jar file as u
 <dependency>
     <groupId>io.synclite</groupId>
     <artifactId>synclite-logger</artifactId>
-    <version>2023.12.06</version>
+    <version>2023.12.23</version>
 </dependency>
 ```
 
