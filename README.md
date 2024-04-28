@@ -49,9 +49,11 @@ Refer src/main/resources/synclite_logger.conf file for all available configurati
 
 SyncLite Platform allows applications to create three types of devices:
 
-1. Transactional Device : Transcational device supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
+## 1. Transactional Device : 
 
-## Java   
+Transcational device supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
+
+### Java   
 ```
 package testApp;
 
@@ -127,7 +129,7 @@ public class TestTransactionalDevice {
 }
 
 ```
-## Python   
+### Python   
 
 ```
 import jaydebeapi
@@ -168,9 +170,10 @@ curs.execute("close database c:\\synclite\\python\\data\\t.db");
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
-2. Telemetry Device : Telemetry device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming apps, stream IoT/sensor data etc. use cases
+## 2. Telemetry Device : 
+Telemetry device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming apps, stream IoT/sensor data etc. use cases
 
-## Java
+### Java
 
 ```
 package testApp;
@@ -232,7 +235,7 @@ public class TestTelemetryDevice {
 	}
 }
 ```
-## Python
+### Python
 
 ```
 import jaydebeapi
@@ -261,9 +264,10 @@ curs.execute("close database c:\\synclite\\python\\data\\t_tel.db");
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
-3. Appender Device : Appander device provides similar capabilities as Telemetry device with an additional capability to also mantain a copy of the ingested data on the edge device which can be leveraged for in-app edge computing/analytics.
+## 3. Appender Device : 
+Appander device provides similar capabilities as Telemetry device with an additional capability to also mantain a copy of the ingested data on the edge device which can be leveraged for in-app edge computing/analytics.
 
-## Java
+### Java
 
 ```
 package testApp;
@@ -327,7 +331,7 @@ public class TestAppenderDevice {
 }
 ```
 
-## Python
+### Python
 
 ```
 import jaydebeapi
