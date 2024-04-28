@@ -8,11 +8,11 @@ SyncLite excels at performing real-time data replication and consolidation from 
 
 More specifically, it enables following scenarios for a wide range of database, data warehouse or a data lakes.
 
-##Edge/Mobile/Desktop Applications: Build applications effortlessly with SyncLite's edge DB/logger (a lightweight JDBC wrapper over SQLite) and enable real-time transactional data consolidation from thousands of application instances into one or more destinations.
+## Edge/Mobile/Desktop Applications: Build applications effortlessly with SyncLite's edge DB/logger (a lightweight JDBC wrapper over SQLite) and enable real-time transactional data consolidation from thousands of application instances into one or more destinations.
 
-##IoT Applications: Effortlessly connect hundreds of MQTT brokers (IoT gateways) to one or more destinations.
+## IoT Applications: Effortlessly connect hundreds of MQTT brokers (IoT gateways) to one or more destinations.
 
-##Database Replication/ETL Pipelines: Set up replication, migration, or ETL pipelines from a diverse range of source databases and raw data files into one or more destinations.
+## Database Replication/ETL Pipelines: Set up replication, migration, or ETL pipelines from a diverse range of source databases and raw data files into one or more destinations.
 
 SyncLite is scalable, secure, extensible, fault-tolerant, enabling a wide range of use-cases, including rapidly building smart resource monitors, building native SQL (hot) data stores on top of cloud hosted databases, building data mesh architectures, database migration/replication pipelines, deploying pluggable IoT data stacks, enabling cloud databases at the edge, creating OLTP + OLAP solutions, setting up software telemetry pipelines, among others.
 
