@@ -381,6 +381,7 @@ public class TestTelemetryDevice {
         	producer.send(record);		
 		produer.close();
 	}
+}
 ```
 
 
