@@ -363,30 +363,23 @@ curs.execute("close database c:\\synclite\\python\\data\\t_appender.db");
 
 # Application Code Samples (Kafka API)
 
+### Java
 ```
 package testApp;
 
 import io.synclite.logger.*;
 
 public class TestTelemetryDevice {
-
 	public static void main(String[] args) throws Exception {
-
-		Properties props = new Properties();
-	    
+		Properties props = new Properties();	  
 		//
 		//Set properties to use a staging storage of your choice e.g. S3, MinIO, SFTP etc. 
 		//where SyncLite logger will ship log files continuously for consumption by SyncLite consolidator
-		//
-		
-        Producer<String, String> producer = new io.synclite.logger.KafkaProducer(props);
-
-		ProducerRecord<String, String> record = new ProducerRecord<>("test", "key", "value");
-           
-        producer.send(record);
-		
+		//		
+        	Producer<String, String> producer = new io.synclite.logger.KafkaProducer(props);
+		ProducerRecord<String, String> record = new ProducerRecord<>("test", "key", "value");          
+        	producer.send(record);		
 		produer.close();
-
 	}
 ```
 
