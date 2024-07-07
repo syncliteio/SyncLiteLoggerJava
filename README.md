@@ -27,7 +27,7 @@ SyncLite Platform comprises of two components : SyncLite Logger and SyncLite Con
 
 1. SyncLite Logger : SyncLite Logger is a lighweight JDBC wrapper built on top of SQLite, providing a SQL interface over JDBC for user applications, enabling them for in-app data management/analytics while logging all the SQL transactional activity into log files and shipping them to one of more configured staging storages like SFTP/S3/MinIO/Kafka/GoogleDrive/MSOneDrive/NFS etc. 
 
-2. SyncLite Consolidator : SyncLite Consolidator is a Java application deployed on an on-premise host or a cloud VM is configured to scan thousands of SyncLite devices/databases and their logs continously from the configured staging storage which are uploaded by numerous edge/desktop applications, performs real-time transactional data replication/consolidation into one or more configured databases, data warehouses or data lakes of user's choice.
+2. SyncLite Consolidator : SyncLite Consolidator is a Java application deployed on an on-premise host or a cloud VM is configured to scan thousands of SyncLite devices/databases and their logs continously from the configured staging storage which are uploaded by numerous edge/desktop applications, performs real-time transactional data replication/consolidation into one or more configured databases, data warehouses or data lakes of user's choice. Refer : https://hub.docker.com/r/syncliteio/synclite-consolidator
    
 # Using SyncLite Logger
 
@@ -37,7 +37,7 @@ This repository has been created to distribute the SyncLite logger jar file as u
 <dependency>
     <groupId>io.synclite</groupId>
     <artifactId>synclite-logger</artifactId>
-    <version>2024.06.12</version>
+    <version>2024.07.07</version>
 </dependency>
 ```
 
@@ -49,11 +49,11 @@ Refer src/main/resources/synclite_logger.conf file for all available configurati
 
 SyncLite Platform allows applications to create three types of devices:
 
-## 1. Transactional Device : 
+## 1. SQLite Device : 
 
-Transcational device supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
+SQLite device (aka transcational device) supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
 
-### Java   
+### Java
 ```
 package testApp;
 
@@ -66,14 +66,14 @@ import java.sql.Statement;
 import io.synclite.logger.*;
 
 
-public class TestTransactionalDevice {
+public class TestSQLiteDevice {
 	
 	public static Path syncLiteDBPath;
 	public static void appStartup() throws SQLException, ClassNotFoundException {
 		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
-		Class.forName("io.synclite.logger.Transactional");
+		Class.forName("io.synclite.logger.SQLite");
 		Path dbPath = syncLiteDBPath.resolve("t.db");
-		SyncLite.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+		SQLite.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}	
 	
 	public void myAppBusinessLogic() throws SQLException {
@@ -81,7 +81,7 @@ public class TestTransactionalDevice {
 		//Some application business logic
 		//
 		//Perform some database operations		
-		try (Connection conn = DriverManager.getConnection("jdbc:synclite:" + syncLiteDBPath.resolve("t.db"))) {
+		try (Connection conn = DriverManager.getConnection("jdbc:synclite_sqlite:" + syncLiteDBPath.resolve("t.db"))) {
 			try (Statement stmt = conn.createStatement()) { 
 				//Example of executing a DDL : CREATE TABLE. 
 				//You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
@@ -116,13 +116,13 @@ public class TestTransactionalDevice {
 			}
 		}
 		//Close SyncLite database/device cleanly.
-		SyncLite.closeDevice(Path.of("t.db"));
+		SQLite.closeDevice(Path.of("t.db"));
 		//You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 	}	
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		appStartup();
-		TestTransactionalDevice testApp = new TestTransactionalDevice();
+		TestSQLiteDevice testApp = new TestTransactionalDevice();
 		testApp.myAppBusinessLogic();
 	}
 
@@ -136,10 +136,10 @@ import jaydebeapi
 
 props = {
   "config": "synclite_logger.conf",
-  "device-name" : "transactional1"
+  "device-name" : "sqlite1"
 }
-conn = jaydebeapi.connect("io.synclite.logger.Transactional",
-                           "jdbc:synclite:c:\\synclite\\python\\data\\t.db",
+conn = jaydebeapi.connect("io.synclite.logger.SQLite",
+                           "jdbc:synclite_sqlite:c:\\synclite\\python\\data\\t.db",
                            props,
                            "synclite-logger-<version>.jar",)
 
@@ -193,7 +193,7 @@ public class TestTelemetryDevice {
 		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
 		Class.forName("io.synclite.logger.Telemetry");
 		Path dbPath = syncLiteDBPath.resolve("t_tel.db");
-		SyncLiteTelemetry.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+		Telemetry.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}
 
 	public void myAppBusinessLogic() throws SQLException {
@@ -223,7 +223,7 @@ public class TestTelemetryDevice {
 			}
 		}
 		// Close SyncLite database/device cleanly.
-		SyncLiteTelemetry.closeDevice(Path.of("t_tel.db"));
+		Telemetry.closeDevice(Path.of("t_tel.db"));
 		// You can also close all open databases/devices in a single SQL : CLOSE ALL
 		// DATABASES
 	}
@@ -287,7 +287,7 @@ public class TestAppenderDevice {
 		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
 		Class.forName("io.synclite.logger.Telemetry");
 		Path dbPath = syncLiteDBPath.resolve("t_app.db");
-		SyncLiteAppender.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+		Appender.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}
 
 	public void myAppBusinessLogic() throws SQLException {
@@ -317,7 +317,7 @@ public class TestAppenderDevice {
 			}
 		}
 		// Close SyncLite database/device cleanly.
-		SyncLiteAppender.closeDevice(Path.of("t_app.db"));
+		Appender.closeDevice(Path.of("t_app.db"));
 		// You can also close all open databases/devices in a single SQL : CLOSE ALL
 		// DATABASES
 	}
