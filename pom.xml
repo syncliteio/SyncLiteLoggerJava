@@ -2,11 +2,10 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.synclite</groupId>
 	<artifactId>synclite-logger</artifactId>
-	<version>2024.07.07</version>
+	<version>2024.07.15</version>
 	<name>SyncLite EdgeDB and Logger</name>
 	<description>SyncLite EdgeDB aka SyncLite Logger for Java applications</description>
 	<url>https://github.com/syncliteio/SyncLiteLoggerJava</url>
-
 	<licenses>
 		<license>
 			<name>Apache License Version 2.0</name>
@@ -30,9 +29,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-                <maven.javadoc.tags>
-                    JDBC, EdgeDB, RDBMS, SQLite
-                </maven.javadoc.tags>
+        <maven.javadoc.tags>
+            EdgeDB, RDBMS, SQLite, JDBC, KafkaProducerAPI
+        </maven.javadoc.tags>
 	</properties>
 	<distributionManagement>
 		<snapshotRepository>
@@ -108,6 +107,9 @@
 						<configuration>
 							<!-- Include an empty source directory to satisfy the plugin -->
 							<sourcepath>${project.basedir}/src/main/java</sourcepath>
+							<additionalparam>
+								-tag ${maven.javadoc.tags}
+							</additionalparam>
 						</configuration>
 					</execution>
 				</executions>
