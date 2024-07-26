@@ -37,7 +37,7 @@ This repository has been created to distribute the SyncLite logger jar file as u
 <dependency>
     <groupId>io.synclite</groupId>
     <artifactId>synclite-logger</artifactId>
-    <version>2024.07.15</version>
+    <version>2024.07.26</version>
 </dependency>
 ```
 
@@ -170,8 +170,8 @@ curs.execute("close database c:\\synclite\\python\\data\\t.db");
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
-## 2. Telemetry Device : 
-Telemetry device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming apps, stream IoT/sensor data etc. use cases
+## 2. Streaming Device : 
+Streaming device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed concurrent batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming apps, stream IoT/sensor data etc. use cases
 
 ### Java
 
@@ -186,14 +186,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import io.synclite.logger.*;
 
-public class TestTelemetryDevice {
+public class TestStreamingDevice {
 	public static Path syncLiteDBPath;
 
 	public static void appStartup() throws SQLException, ClassNotFoundException {
 		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
-		Class.forName("io.synclite.logger.Telemetry");
-		Path dbPath = syncLiteDBPath.resolve("t_tel.db");
-		Telemetry.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+		Class.forName("io.synclite.logger.Streaming");
+		Path dbPath = syncLiteDBPath.resolve("t_str.db");
+		Streaming.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}
 
 	public void myAppBusinessLogic() throws SQLException {
@@ -202,7 +202,7 @@ public class TestTelemetryDevice {
 		//
 		// Perform some database operations
 		try (Connection conn = DriverManager
-				.getConnection("jdbc:synclite_telemetry:" + syncLiteDBPath.resolve("t_tel.db"))) {
+				.getConnection("jdbc:synclite_streaming:" + syncLiteDBPath.resolve("t_str.db"))) {
 			try (Statement stmt = conn.createStatement()) {
 				// Example of executing a DDL : CREATE TABLE.
 				// You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
@@ -223,14 +223,14 @@ public class TestTelemetryDevice {
 			}
 		}
 		// Close SyncLite database/device cleanly.
-		Telemetry.closeDevice(Path.of("t_tel.db"));
+		Streaming.closeDevice(Path.of("t_str.db"));
 		// You can also close all open databases/devices in a single SQL : CLOSE ALL
 		// DATABASES
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		appStartup();
-		TestTelemetryDevice testApp = new TestTelemetryDevice();
+		TestStreamingDevice testApp = new TestStreamingDevice();
 		testApp.myAppBusinessLogic();
 	}
 }
@@ -241,10 +241,10 @@ public class TestTelemetryDevice {
 import jaydebeapi
 props = {
   "config": "synclite_logger.conf",
-  "device-name" : "telemetry1"
+  "device-name" : "streaming1"
 }
-conn = jaydebeapi.connect("io.synclite.logger.Telemetry",
-                           "jdbc:synclite_telemetry:c:\\synclite\\python\\data\\t_tel.db",
+conn = jaydebeapi.connect("io.synclite.logger.Streaming",
+                           "jdbc:synclite_streaming:c:\\synclite\\python\\data\\t_str.db",
                            props,
                            "synclite-logger-<version>.jar",)
 
@@ -259,13 +259,13 @@ args = [[4, 'Excellent product'],[5, 'Outstanding product']]
 curs.executemany("insert into feedback values (?, ?)", args)
 
 #Close SyncLite database/device cleanly.
-curs.execute("close database c:\\synclite\\python\\data\\t_tel.db");
+curs.execute("close database c:\\synclite\\python\\data\\t_str.db");
 
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
 ## 3. Appender Device : 
-Appander device provides similar capabilities as Telemetry device with an additional capability to also mantain a copy of the ingested data on the edge device which can be leveraged for in-app edge computing/analytics.
+Appander device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge device which can be leveraged for in-app edge computing/analytics.
 
 ### Java
 
@@ -285,7 +285,7 @@ public class TestAppenderDevice {
 
 	public static void appStartup() throws SQLException, ClassNotFoundException {
 		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
-		Class.forName("io.synclite.logger.Telemetry");
+		Class.forName("io.synclite.logger.Appender");
 		Path dbPath = syncLiteDBPath.resolve("t_app.db");
 		Appender.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}
@@ -368,7 +368,7 @@ package testApp;
 
 import io.synclite.logger.*;
 
-public class TestTelemetryDevice {
+public class TestKafkaProducer {
 
 	public static void main(String[] args) throws Exception {
 
@@ -382,7 +382,10 @@ public class TestTelemetryDevice {
         Producer<String, String> producer = new io.synclite.logger.KafkaProducer(props);
 
 		ProducerRecord<String, String> record = new ProducerRecord<>("test", "key", "value");
-           
+        
+		//
+		//You can use same or different KafkaProducer objects to ingest data concurrently over multiple theads.
+		//
         producer.send(record);
 		
 		produer.close();
