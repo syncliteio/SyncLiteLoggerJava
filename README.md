@@ -1,8 +1,10 @@
-# SyncLite Platform
+# SyncLite - Build Anything Sync Anywhere
 
 SyncLite is a no-code, real-time, relational data consolidation platform empowering developers to rapidly build data-intensive applications for desktops, edge devices, smartphones, with the capability to enable in-app data management, in-app analytics and perform real-time data consolidation from numerous application instances into one or more databases, data warehouses, or data lakes of your choice.
 
+```
 {Edge/Desktop/Phone Apps} + {SyncLite Logger} ------> {Staging Storage} ------> { SyncLite Consolidator} -----> {Destination DB/DW/DataLakes}
+```
 
 SyncLite is scalable, secure, extensible, fault-tolerant, enabling a wide range of use-cases, including rapidly building smart resource monitors, building native SQL (hot) data stores on top of cloud hosted databases, building data mesh architectures, database migration/replication pipelines, deploying pluggable IoT data stacks, enabling cloud databases at the edge, creating OLTP + OLAP solutions, setting up software telemetry pipelines, among others.
 
@@ -10,11 +12,19 @@ SyncLite excels at performing real-time data replication and consolidation from 
 
 More specifically, it enables following scenarios for a wide range of database, data warehouse or a data lakes.
 
--Edge/Mobile/Desktop Applications: Build applications effortlessly with SyncLite's edge DB/logger (a lightweight JDBC wrapper over SQLite) and enable real-time transactional data consolidation from thousands of application instances into one or more destinations.
+## Edge/Mobile/Desktop Applications: 
+SyncLite's pioneering CDC replication framework for embedded databases, is designed to empower data-intensive edge, desktop, and mobile applications. It seamlessly integrates with embedded databases like SQLite, DuckDB, Apache Derby, H2, HyperSQL(HSQLDB), enabling transactional, real-time data replication and consolidation from them. SyncLite EdgeDB, aka SyncLite Logger, efficiently performs Change Data Capture (CDC) from numerous application instances built on top of embedded databases. The generated log files are synchronized with SyncLite Consolidator, which replicates and consolidates them into a diverse range of industry leading databases, data warehouses, and data lakes.
 
--IoT Applications: Effortlessly connect hundreds of MQTT brokers (IoT gateways) to one or more destinations.
+## Streaming Applications: 
+SyncLite facilitates development of large-scale data streaming applications through SyncLite Logger, which offers both a Kafka Producer API and SQL API. This allows for the ingestion of massive amounts of data and provides the capability to query the ingested data using the SQL API within applications. Together, SyncLite Logger and SyncLite Consolidator enable seamless last-mile data integration from thousands of streaming application instances into a diverse array of final data destinations, including all the industry leading databases, data warehouses, and data lakes.
 
--Database Replication/ETL Pipelines: Set up replication, migration, or ETL pipelines from a diverse range of source databases and raw data files into one or more destinations.
+## Smart Database Replication/ETL Pipelines: 
+Set up replication, migration, or incremental ETL pipelines from a diverse range of source databases and raw data files into a diverse range of destinations.
+
+## IoT Applications: 
+Effortlessly connect hundreds of MQTT brokers (IoT gateways) to one or more final data destinations.
+
+SyncLite continues to introduce new data integration options, expanding our range to offer hundreds of data pipeline options and countless data integration architecture possibilities. Supported systems include PostgreSQL, MySQL, SQLite, MongoDB, Apache Iceberg tables, DuckDB, Microsoft SQL Server, Oracle, IBM Db2, ClickHouse, Snowflake, Redshift, S3 Data Lake, etc.
 
 For more details, check out 
 Website : https://www.synclite.io
@@ -25,10 +35,21 @@ YouTube : https://www.youtube.com/@syncliteplatform
 
 SyncLite Platform comprises of two components : SyncLite Logger and SyncLite Consolidator.
 
-1. SyncLite Logger : SyncLite Logger is a lighweight JDBC wrapper built on top of SQLite, providing a SQL interface over JDBC for user applications, enabling them for in-app data management/analytics while logging all the SQL transactional activity into log files and shipping them to one of more configured staging storages like SFTP/S3/MinIO/Kafka/GoogleDrive/MSOneDrive/NFS etc. 
+```SyncLite Logger```: is a lighweight JDBC wrapper built on top of SQLite, providing a SQL interface over JDBC for user applications, enabling them for in-app data management/analytics while logging all the SQL transactional activity into log files and shipping them to one of more configured staging storages like SFTP/S3/MinIO/Kafka/GoogleDrive/MSOneDrive/NFS etc. (Note: Extended SYncLite logger extends this functionality to other embedded databases : DuckDB, Apache Derby, H2, HyperSQL. Refer : https://github.com/syncliteio/SyncLiteLoggerJavaExtended)
 
-2. SyncLite Consolidator : SyncLite Consolidator is a Java application deployed on an on-premise host or a cloud VM is configured to scan thousands of SyncLite devices/databases and their logs continously from the configured staging storage which are uploaded by numerous edge/desktop applications, performs real-time transactional data replication/consolidation into one or more configured databases, data warehouses or data lakes of user's choice. Refer : https://hub.docker.com/r/syncliteio/synclite-consolidator
-   
+```SyncLite Consolidator```: is Java application deployed on an on-premise host or a cloud VM is configured to scan thousands of SyncLite devices/databases and their logs continously from the configured staging storage which are uploaded by numerous edge/desktop applications, performs real-time transactional data replication/consolidation into one or more configured databases, data warehouses or data lakes of user's choice. Refer : https://hub.docker.com/r/syncliteio/synclite-consolidator
+
+```SyncLite DBReader```: enables data teams and data engineers effortlessly configure and orchestrate many-to-many, highly scalable database replication/migration/ETL jobs across a diverse array of databases, data warehouses and data lakes.
+
+```SyncLite QReader```: enables IoT developers integrate vast amounts of data published to message queue brokers, into a diverse array of databases, data warehouses and data lakes, enabling real-time analytics and AI use cases at all three levels: edge, fog and cloud.
+
+```SyncLite JobMonitor```: enables managing, scheduling and monitoring all the SyncLite jobs created on a given host.
+
+```SyncLite Client```: is a command line tool to operate SyncLite devices, to execute SQL queries and workloads.
+
+SyncLite Consolidator is the centralized application to all the reader/producer tools mentioned above, which receives and consolidates the incoming data streams into one or more databases, data warehouses and data lakes of user’s choice.
+
+
 # Using SyncLite Logger
 
 This repository has been created to distribute the SyncLite logger jar file as updated in src/main/resources. You can use the following maven dependency in your edge/desktop applications for creating and operating edge databases/devices.
@@ -41,19 +62,19 @@ This repository has been created to distribute the SyncLite logger jar file as u
 </dependency>
 ```
 
-# Configuration File
+## Configuration File
 
 Refer src/main/resources/synclite_logger.conf file for all available configuration options for SyncLite Logger. Refer "SyncLite Logger Configuration" section in the documentation at https://www.synclite.io/resources/documentation for more details about all configuration options. 
 
-# Application Code Samples (SQL API)
+## Application Code Samples (SQL API)
 
 SyncLite Platform allows applications to create three types of devices:
 
-## 1. SQLite Device : 
+### 1. SQLite Device : 
 
 SQLite device (aka transcational device) supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
 
-### Java
+#### Java
 ```
 package testApp;
 
@@ -129,7 +150,7 @@ public class TestSQLiteDevice {
 }
 
 ```
-### Python   
+#### Python   
 
 ```
 import jaydebeapi
@@ -171,10 +192,10 @@ curs.execute("close database c:\\synclite\\python\\data\\t.db");
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
-## 2. Streaming Device : 
+### 2. Streaming Device : 
 Streaming device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed concurrent batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming apps, stream IoT/sensor data etc. use cases
 
-### Java
+#### Java
 
 ```
 package testApp;
@@ -236,7 +257,7 @@ public class TestStreamingDevice {
 	}
 }
 ```
-### Python
+#### Python
 
 ```
 import jaydebeapi
@@ -265,10 +286,10 @@ curs.execute("close database c:\\synclite\\python\\data\\t_str.db");
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
-## 3. Appender Device : 
+### 3. Appender Device : 
 Appender device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge device which can be leveraged for in-app edge computing/analytics.
 
-### Java
+#### Java
 
 ```
 package testApp;
@@ -332,7 +353,7 @@ public class TestAppenderDevice {
 }
 ```
 
-### Python
+#### Python
 
 ```
 import jaydebeapi
@@ -362,7 +383,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t_appender.db");
 ```
 
 
-# Application Code Samples (Kafka API)
+## Application Code Samples (Kafka API)
 
 ```
 package testApp;
@@ -380,14 +401,14 @@ public class TestKafkaProducer {
 		//where SyncLite logger will ship log files continuously for consumption by SyncLite consolidator
 		//
 		
-        Producer<String, String> producer = new io.synclite.logger.KafkaProducer(props);
+        	Producer<String, String> producer = new io.synclite.logger.KafkaProducer(props);
 
 		ProducerRecord<String, String> record = new ProducerRecord<>("test", "key", "value");
         
 		//
 		//You can use same or different KafkaProducer objects to ingest data concurrently over multiple theads.
 		//
-        producer.send(record);
+        	producer.send(record);
 		
 		produer.close();
 
