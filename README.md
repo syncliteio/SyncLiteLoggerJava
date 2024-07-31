@@ -37,7 +37,7 @@ This repository has been created to distribute the SyncLite logger jar file as u
 <dependency>
     <groupId>io.synclite</groupId>
     <artifactId>synclite-logger</artifactId>
-    <version>2024.07.30</version>
+    <version>2024.07.31</version>
 </dependency>
 ```
 
@@ -163,6 +163,7 @@ conn.jconn.setAutoCommit(True)
 
 #Example of Prepared Statement functionality for bulk insert.
 args = [[4, 'Excellent product'],[5, 'Outstanding product']]
+curs.executemany("insert into feedback values (?, ?)", args)
 
 #Close SyncLite database/device cleanly.
 curs.execute("close database c:\\synclite\\python\\data\\t.db");
@@ -265,7 +266,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t_str.db");
 ```
 
 ## 3. Appender Device : 
-Appander device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge device which can be leveraged for in-app edge computing/analytics.
+Appender device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge device which can be leveraged for in-app edge computing/analytics.
 
 ### Java
 
