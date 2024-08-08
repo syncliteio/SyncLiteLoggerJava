@@ -287,7 +287,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t_str.db");
 ```
 
 ### 3. SQLite Appender Device : 
-SQLite appender device provides similar capabilities as streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data in the local embedded database on the edge/mobile/desktop device which can be leveraged for in-app edge analytics.
+SQLite appender device provides similar capabilities as streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested/streamed data in the local embedded databases on the edge/mobile/desktop device which can be leveraged for in-app edge analytics.
 
 #### Java
 
