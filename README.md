@@ -193,7 +193,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t.db");
 ```
 
 ### 2. Streaming Device : 
-Streaming device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed concurrent batched data ingestion, performing logging of the ingested data. It empowers developers to build high volumne streaming applications enabled with last mile data integration from thousands of edge points into centralized database destinations.
+Streaming device allows all DDL operations as supported by SQLite and Prepared Statement based INSERT operations (UPDATE and DELETE not allowed) to allow high speed concurrent batched data ingestion, performing logging and streaming of the ingested data. Streaming device empowers developers to build high volume data streaming applications enabled with last mile data integration from thousands of edge applications into centralized database destinations.
 
 #### Java
 
@@ -287,7 +287,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t_str.db");
 ```
 
 ### 3. SQLite Appender Device : 
-SQLite appender device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge/mobile/desktop device which can be leveraged for in-app edge computing/analytics.
+SQLite appender device provides similar capabilities as streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data in the local embedded database on the edge/mobile/desktop device which can be leveraged for in-app edge analytics.
 
 #### Java
 
