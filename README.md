@@ -72,7 +72,7 @@ SyncLite Platform allows applications to create three types of devices:
 
 ### 1. SQLite Transactional Device : 
 
-SQLite device (aka transcational device) supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
+SQLite transactional device supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as building data-intensive sync-ready applications, Edge + Cloud GenAI search and RAG applications, native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases etc.
 
 #### Java
 ```
@@ -193,7 +193,7 @@ curs.execute("close database c:\\synclite\\python\\data\\t.db");
 ```
 
 ### 2. Streaming Device : 
-Streaming device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed concurrent batched data ingestion, performing logging of the ingested data. It empowers developers to build data-intensive streaming apps, stream IoT/sensor data etc. use cases
+Streaming device supports all DDL operations as supported by SQLite and Prepared Statement based INSERT operation to allow high speed concurrent batched data ingestion, performing logging of the ingested data. It empowers developers to build high volumne streaming applications enabled with last mile data integration from thousands of edge points into centralized database destinations.
 
 #### Java
 
