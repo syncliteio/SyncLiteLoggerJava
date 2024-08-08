@@ -70,7 +70,7 @@ Refer src/main/resources/synclite_logger.conf file for all available configurati
 
 SyncLite Platform allows applications to create three types of devices:
 
-### 1. SQLite Device : 
+### 1. SQLite Transactional Device : 
 
 SQLite device (aka transcational device) supports all database operations as supported by SQLite and performs transactional logging of all the DDL and DML operations performed by the application. It empowers developers to build use cases such as native SQL (hot) hot data stores, SQL application caches, edge enablement of cloud databases, building OLTP + OLAP solutions etc.
 
@@ -286,8 +286,8 @@ curs.execute("close database c:\\synclite\\python\\data\\t_str.db");
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
 
-### 3. Appender Device : 
-Appender device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge device which can be leveraged for in-app edge computing/analytics.
+### 3. SQLite Appender Device : 
+SQLite appender device provides similar capabilities as Streaming device but it allows a single writer at any point (unlike a Streaming device which supports concurrent data ingestion). It has an additional capability to also mantain a copy of the ingested data (in a local SQLite database file) on the edge/mobile/desktop device which can be leveraged for in-app edge computing/analytics.
 
 #### Java
 
@@ -302,14 +302,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import io.synclite.logger.*;
 
-public class TestAppenderDevice {
+public class TestSQLiteAppenderDevice {
 	public static Path syncLiteDBPath;
 
 	public static void appStartup() throws SQLException, ClassNotFoundException {
 		syncLiteDBPath = Path.of(System.getProperty("user.home"), "synclite", "db");
-		Class.forName("io.synclite.logger.Appender");
-		Path dbPath = syncLiteDBPath.resolve("t_app.db");
-		Appender.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
+		Class.forName("io.synclite.logger.SQLiteAppender");
+		Path dbPath = syncLiteDBPath.resolve("test_sqlite_appender.db");
+		SQLiteAppender.initialize(dbPath, syncLiteDBPath.resolve("synclite_logger.conf"));
 	}
 
 	public void myAppBusinessLogic() throws SQLException {
@@ -318,7 +318,7 @@ public class TestAppenderDevice {
 		//
 		// Perform some database operations
 		try (Connection conn = DriverManager
-				.getConnection("jdbc:synclite_appender:" + syncLiteDBPath.resolve("t_app.db"))) {
+				.getConnection("jdbc:synclite_sqlite_appender:" + syncLiteDBPath.resolve("test_sqlite_appender.db"))) {
 			try (Statement stmt = conn.createStatement()) {
 				// Example of executing a DDL : CREATE TABLE.
 				// You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
@@ -326,6 +326,8 @@ public class TestAppenderDevice {
 			}
 
 			// Example of Prepared Statement functionality for bulk insert.
+			// Note that Appender Devices only support DDLs, INSERT INTO DML operations and SELECT queries.
+			//
 			try (PreparedStatement pstmt = conn.prepareStatement("INSERT INTO feedback VALUES(?, ?)")) {
 				pstmt.setInt(1, 4);
 				pstmt.setString(2, "Excellent Product");
@@ -339,14 +341,14 @@ public class TestAppenderDevice {
 			}
 		}
 		// Close SyncLite database/device cleanly.
-		Appender.closeDevice(Path.of("t_app.db"));
+		SQLiteAppender.closeDevice(Path.of("test_sqlite_appender.db"));
 		// You can also close all open databases/devices in a single SQL : CLOSE ALL
 		// DATABASES
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		appStartup();
-		TestAppenderDevice testApp = new TestAppenderDevice();
+		TestSQLiteAppenderDevice testApp = new TestSQLiteAppenderDevice();
 		testApp.myAppBusinessLogic();
 	}
 
@@ -359,16 +361,16 @@ public class TestAppenderDevice {
 import jaydebeapi
 props = {
   "config": "synclite_logger.conf",
-  "device-name" : "appender1"
+  "device-name" : "sqliteapp1"
 }
 conn = jaydebeapi.connect("io.synclite.logger.Appender",
-                           "jdbc:synclite_appender:c:\\synclite\\python\\data\\t_appender.db",
+                           "jdbc:synclite_sqlite_appender:c:\\synclite\\python\\data\\test_sqlite_appender.db",
                            props,
                            "synclite-logger-<version>.jar",)
 
 curs = conn.cursor()
 
-#Example of executing a DDL : CEATE TABLE.
+#Example of executing a DDL : CREATE TABLE.
 #You can execute other DDL operations : DROP TABLE, ALTER TABLE, RENAME TABLE.
 curs.execute('CREATE TABLE IF NOT EXISTS feedback(rating INT, comment TEXT)')
 
@@ -377,7 +379,7 @@ args = [[4, 'Excellent product'],[5, 'Outstanding product']]
 curs.executemany("insert into feedback values (?, ?)", args)
 
 #Close SyncLite database/device cleanly.
-curs.execute("close database c:\\synclite\\python\\data\\t_appender.db");
+curs.execute("close database c:\\synclite\\python\\data\\test_sqlite_appender.db");
 
 #You can also close all open databases in a single SQL : CLOSE ALL DATABASES
 ```
