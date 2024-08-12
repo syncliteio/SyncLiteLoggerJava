@@ -33,22 +33,25 @@ YouTube : https://www.youtube.com/@syncliteplatform
 
 # SyncLite Components
 
-SyncLite Platform comprises of two components : SyncLite Logger and SyncLite Consolidator.
+SyncLite's comprehensive toolkit includes following tools:
 
-```SyncLite Logger```: is a lighweight JDBC wrapper built on top of SQLite, providing a SQL interface over JDBC for user applications, enabling them for in-app data management/analytics while logging all the SQL transactional activity into log files and shipping them to one of more configured staging storages like SFTP/S3/MinIO/Kafka/GoogleDrive/MSOneDrive/NFS etc. (Note: Extended SYncLite logger extends this functionality to other embedded databases : DuckDB, Apache Derby, H2, HyperSQL. Refer : https://github.com/syncliteio/SyncLiteLoggerJavaExtended)
+```SyncLite Logger (and Extended SyncLite Logger)``` enables developers to quickly build
 
-```SyncLite Consolidator```: is Java application deployed on an on-premise host or a cloud VM is configured to scan thousands of SyncLite devices/databases and their logs continously from the configured staging storage which are uploaded by numerous edge/desktop applications, performs real-time transactional data replication/consolidation into one or more configured databases, data warehouses or data lakes of user's choice. Refer : https://hub.docker.com/r/syncliteio/synclite-consolidator
+- sync-ready, robust, responsive, high-performance, low-latency, transactional, data intensive applications for edge/mobile/desktop platforms using your favorite embedded databases.
+  
+- massive scale data streaming solutions for last mile data integrations into a wide range of industry leading databases, while offering ability to perform real-time analytics using the native embedded databases over streaming data, at the producer end of the pipelines.
+  
+```SyncLite DBReader``` enables data teams and data engineers effortlessly configure and orchestrate many-to-many, highly scalable database replication/migration/ETL jobs across a diverse array of databases, data warehouses and data lakes.
 
-```SyncLite DBReader```: enables data teams and data engineers effortlessly configure and orchestrate many-to-many, highly scalable database replication/migration/ETL jobs across a diverse array of databases, data warehouses and data lakes.
+```SyncLite FileReader``` enables data teams and data engineers effortlessly channelize raw data files in various formats into modern databases and data warehouses.
 
-```SyncLite QReader```: enables IoT developers integrate vast amounts of data published to message queue brokers, into a diverse array of databases, data warehouses and data lakes, enabling real-time analytics and AI use cases at all three levels: edge, fog and cloud.
+```SyncLite QReader``` enables IoT developers integrate vast amounts of data published to message queue brokers, into a diverse array of databases, data warehouses and data lakes, enabling real-time analytics and AI use cases at all three levels: edge, fog and cloud.
 
-```SyncLite JobMonitor```: enables managing, scheduling and monitoring all the SyncLite jobs created on a given host.
+```SyncLite Consolidator``` is the centralized application to all the reader/producer tools mentioned above, which receives and consolidates the incoming data and loig files in real-time into one or more databases, data warehouses and data lakes of user’s choice.
 
-```SyncLite Client```: is a command line tool to operate SyncLite devices, to execute SQL queries and workloads.
+```SyncLite JobMonitor``` enables managing, scheduling and monitoring all the SyncLite jobs created on a given host.
 
-SyncLite Consolidator is the centralized application to all the reader/producer tools mentioned above, which receives and consolidates the incoming data streams into one or more databases, data warehouses and data lakes of user’s choice.
-
+```SyncLite Client``` is a command line tool to operate SyncLite devices, to execute SQL queries and workloads.
 
 # Using SyncLite Logger
 
