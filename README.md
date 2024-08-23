@@ -527,19 +527,6 @@ public class TestKafkaProducer {
 	}
 ```
 
-# Extended SyncLite Logger
-
-While SyncLite Logger (```synclite-logger-<version>.jar```) supports the above mentioned devices : SQLite Transactional device, SQLite Appender device and Streaming device, the Extended SyncLite Logger (```synclite-logger-extended-<version>.jar```) extends this functionality to other popular embedded databases and supports following additional devices:
-1. DuckDB Transactional and Appender device
-2. Apache Derby Transactional and Appender device
-3. H2 Transactional and Appender device
-4. HyperSQL Transactional and Appender device.
-
-Refer: https://github.com/syncliteio/SyncLiteLoggerJavaExtended for more details. 
-
-
-
-
 # Deploying SyncLite Consolidator
 
 Refer https://hub.docker.com/r/syncliteio/synclite-consolidator for setting up SyncLite Consolidator.
