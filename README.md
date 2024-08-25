@@ -79,7 +79,9 @@ YouTube : https://www.youtube.com/@syncliteplatform
 
 # Using SyncLite Logger
 
-This repository has been created to distribute the SyncLite logger jar file as updated in src/main/resources. You can use the following maven dependency in your edge/desktop applications for creating and operating edge databases/devices.
+- This repository has been created to distribute the SyncLite logger jar file as updated in src/main/resources. 
+
+- OR You can use the following maven dependency in your edge/desktop applications for creating and operating edge databases/devices.
 
 ```
 <dependency>
@@ -527,9 +529,16 @@ public class TestKafkaProducer {
 	}
 ```
 
+
 # Deploying SyncLite Consolidator
 
 Refer https://hub.docker.com/r/syncliteio/synclite-consolidator for setting up SyncLite Consolidator.
+
+
+# Open Source Software
+
+SyncLite is available as open source software under Apache 2.0 license. You can clone the repository and build SyncLite Logger jar yourself along with other SyncLite tools.
+Refer: https://github.com/syncliteio/SyncLite
 
 
 # Support
