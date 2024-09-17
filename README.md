@@ -87,7 +87,7 @@ YouTube : https://www.youtube.com/@syncliteplatform
 <dependency>
     <groupId>io.synclite</groupId>
     <artifactId>synclite-logger</artifactId>
-    <version>2024.08.23</version>
+    <version>2024.09.17</version>
 </dependency>
 ```
 
