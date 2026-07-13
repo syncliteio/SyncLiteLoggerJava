@@ -3,8 +3,9 @@
 	<groupId>io.synclite</groupId>
 	<artifactId>synclite</artifactId>
 	<version>1.0.0</version>
-	<name>SyncLite for Java applications</name>
-	<description>SyncLite for Java applications</description>
+	<packaging>jar</packaging>
+	<name>synclite</name>
+	<description>SyncLite Java library published as synclite</description>
 	<url>https://github.com/syncliteio/SyncLiteLoggerJava</url>
 	<licenses>
 		<license>
@@ -38,9 +39,14 @@
 			<id>ossrh</id>
 			<url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
 		</snapshotRepository>
+		<repository>
+			<id>ossrh</id>
+			<url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
 	</distributionManagement>
 
 	<build>
+		<finalName>synclite-${project.version}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
