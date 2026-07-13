@@ -1,10 +1,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>io.synclite</groupId>
-	<artifactId>synclite-logger</artifactId>
-	<version>2024.10.02</version>
-	<name>SyncLite SQL Logger</name>
-	<description>SyncLite SQL Logger for Java applications</description>
+	<artifactId>synclite</artifactId>
+	<version>1.0.0</version>
+	<name>SyncLite for Java applications</name>
+	<description>SyncLite for Java applications</description>
 	<url>https://github.com/syncliteio/SyncLiteLoggerJava</url>
 	<licenses>
 		<license>
@@ -30,7 +30,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
         <maven.javadoc.tags>
-            EdgeDB, RDBMS, SQLite, JDBC, KafkaProducerAPI
+            EdgeDB, RDBMS, SQLite, DuckDB, JDBC, 
         </maven.javadoc.tags>
 	</properties>
 	<distributionManagement>
